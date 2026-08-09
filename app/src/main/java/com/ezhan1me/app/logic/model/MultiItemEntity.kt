@@ -1,0 +1,10 @@
+package com.ezhan1me.app.logic.model
+
+/**
+ * @project EZ Han1me
+ * @author Yenaly Liew
+ * @time 2023/11/26 026 17:40
+ */
+interface MultiItemEntity {
+    val itemType: Int
+}

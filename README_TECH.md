@@ -1,10 +1,10 @@
-# Han1meViewer 技术文档
+# EZ Han1me 技术文档
 
 本文档面向维护者和贡献者，描述当前项目的技术架构、关键模块、数据流和开发约定。用户侧介绍请看 [README.md](README.md)。
 
 ## 1. 技术概览
 
-Han1meViewer 当前是以 Kotlin + Jetpack Compose 为主的 Android 应用，整体采用 MVVM 风格组织。
+EZ Han1me 当前是以 Kotlin + Jetpack Compose 为主的 Android 应用，整体采用 MVVM 风格组织。
 
 核心技术：
 
@@ -34,7 +34,7 @@ Gradle 模块：
 主应用关键目录：
 
 ```text
-app/src/main/java/com/yenaly/han1meviewer/
+app/src/main/java/com/ezhan1me/app/
 ├── logic/                 数据、网络、解析、数据库、状态
 │   ├── network/           Retrofit Service、OkHttp、DNS、Cookie、更新服务
 │   ├── model/             业务模型和解析后的页面模型
@@ -556,7 +556,7 @@ entities
 - Compose Compiler 插件随 Kotlin 版本
 - Release 默认启用混淆和资源压缩
 - Release 只打 `arm64-v8a` ABI split
-- APK 文件名格式：`Han1meViewer-v{versionName}.apk`
+- APK 文件名格式：`EZ-Han1me-v{versionName}.apk`
 
 本地常用验证：
 

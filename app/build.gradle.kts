@@ -6,6 +6,8 @@ import Config.isRelease
 import Config.lastCommitSha
 import com.android.build.api.variant.impl.VariantOutputImpl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.security.KeyStore
+import java.io.FileInputStream
 
 plugins {
     alias(libs.plugins.com.android.application)
@@ -34,7 +36,7 @@ android {
 
 
     defaultConfig {
-        applicationId = "com.yenaly.han1meviewer"
+        applicationId = "com.ezhan1me.app"
         minSdk = property("min.sdk")?.toString()?.toIntOrNull()
         targetSdk = property("target.sdk")?.toString()?.toIntOrNull()
         val (code, name) = createVersion(major = 1, minor = 0, patch = 1)
@@ -52,11 +54,47 @@ android {
         buildConfigField("int", "SEARCH_YEAR_RANGE_END", "${Config.thisYear}")
     }
     signingConfigs {
-        create("release") {
-            storeFile = file(System.getenv("HOME") + "/.android/keystore.jks")
-            storePassword = System.getenv("KEYSTORE_PASSWORD")
-            keyAlias = System.getenv("KEY_ALIAS")
-            keyPassword = System.getenv("KEYSTORE_PASSWORD")
+        val envKeystoreFile = file(System.getenv("HOME") + "/.android/keystore.jks")
+        val envKeystorePassword = System.getenv("KEYSTORE_PASSWORD")
+        val envKeyAlias = System.getenv("KEY_ALIAS")
+
+        val hasSigningConfig = envKeystoreFile.exists()
+                && !envKeystorePassword.isNullOrEmpty()
+                && !envKeyAlias.isNullOrEmpty()
+                && runCatching {
+                    // Try JKS first, then PKCS12, to handle both old and new Android keystore formats.
+                    val types = listOf("JKS", "PKCS12")
+                    var verified = false
+                    for (type in types) {
+                        verified = try {
+                            val ks = KeyStore.getInstance(type)
+                            FileInputStream(envKeystoreFile).use { fis ->
+                                ks.load(fis, envKeystorePassword.toCharArray())
+                            }
+                            if (!ks.containsAlias(envKeyAlias)) continue
+                            // Also verify the key password (which equals store password in this project)
+                            // can actually unlock the private/certificate entry; otherwise signing would fail later.
+                            ks.getKey(envKeyAlias, envKeystorePassword.toCharArray())
+                            true
+                        } catch (_: Exception) {
+                            continue
+                        }
+                        if (verified) break
+                    }
+                    if (!verified) {
+                        logger.warn("Release signing skipped: keystore exists but failed to verify " +
+                                "(wrong password, wrong alias, or unsupported format). Building unsigned APK.")
+                    }
+                    verified
+                }.getOrDefault(false)
+
+        if (hasSigningConfig) {
+            create("release") {
+                storeFile = envKeystoreFile
+                storePassword = envKeystorePassword
+                keyAlias = envKeyAlias
+                keyPassword = envKeystorePassword
+            }
         }
     }
 
@@ -77,7 +115,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.findByName("release")
             manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_new"
 
         }
@@ -125,7 +163,7 @@ androidComponents {
         variant.outputs.forEach { output ->
 
             //  val apkName = "你的应用名_V${output.versionName.get()}_Build${output.versionCode.get()}_${variant.buildType}.apk"
-            val apkName = "EZ Han1me-v${output.versionName.get()}.apk"
+            val apkName = "EZ-Han1me-v${output.versionName.get()}.apk"
             (output as VariantOutputImpl).outputFileName = apkName
         }
     }
