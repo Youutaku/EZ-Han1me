@@ -59,6 +59,32 @@ android {
         val hasSigningConfig = keystoreFile.exists()
                 && !keystorePassword.isNullOrEmpty()
                 && !keyAlias.isNullOrEmpty()
+                && runCatching {
+                    // Try JKS first, then PKCS12, to handle both old and new Android keystore formats.
+                    val types = listOf("JKS", "PKCS12")
+                    var verified = false
+                    for (type in types) {
+                        verified = try {
+                            val ks = java.security.KeyStore.getInstance(type)
+                            java.io.FileInputStream(keystoreFile).use { fis ->
+                                ks.load(fis, keystorePassword.toCharArray())
+                            }
+                            if (!ks.containsAlias(keyAlias)) continue
+                            // Also verify the key password (which equals store password in this project)
+                            // can actually unlock the private/certificate entry; otherwise signing would fail later.
+                            ks.getKey(keyAlias, keystorePassword.toCharArray())
+                            true
+                        } catch (_: Exception) {
+                            continue
+                        }
+                        if (verified) break
+                    }
+                    if (!verified) {
+                        logger.warn("Release signing skipped: keystore exists but failed to verify " +
+                                "(wrong password, wrong alias, or unsupported format). Building unsigned APK.")
+                    }
+                    verified
+                }.getOrDefault(false)
 
         if (hasSigningConfig) {
             create("release") {
