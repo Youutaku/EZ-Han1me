@@ -9,7 +9,7 @@ import kotlinx.datetime.format.char
  */
 const val EMPTY_STRING = ""
 
-const val APP_NAME = "EZ Han1me"
+const val APP_NAME = "EZ Han1me" // 应用名称
 
 // 标准时间格式
 
