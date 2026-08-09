@@ -1,0 +1,27 @@
+package com.ezhan1me.app.logic.entity
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
+
+/**
+ * @project EZ Han1me
+ * @author Yenaly Liew
+ * @time 2022/07/02 002 13:13
+ */
+@Serializable
+@Entity
+data class WatchHistoryEntity(
+    val coverUrl: String,
+    val title: String,
+    val releaseDate: Long,
+    val watchDate: Long,
+    val videoCode: String,
+    val progress: Long = 0L,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+) {
+
+    val releaseDateDays: Int
+        get() = (releaseDate / (24 * 60 * 60 * 1000)).toInt()
+}

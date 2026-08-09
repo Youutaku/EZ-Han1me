@@ -36,7 +36,7 @@ android {
 
 
     defaultConfig {
-        applicationId = "com.yenaly.han1meviewer"
+        applicationId = "com.ezhan1me.app"
         minSdk = property("min.sdk")?.toString()?.toIntOrNull()
         targetSdk = property("target.sdk")?.toString()?.toIntOrNull()
         val (code, name) = createVersion(major = 1, minor = 0, patch = 1)
@@ -144,7 +144,7 @@ android {
     lint {
         disable += setOf("EnsureInitializerMetadata")
     }
-    namespace = "com.yenaly.han1meviewer"
+    namespace = "com.ezhan1me.app"
 }
 
 kotlin {
@@ -163,7 +163,7 @@ androidComponents {
         variant.outputs.forEach { output ->
 
             //  val apkName = "你的应用名_V${output.versionName.get()}_Build${output.versionCode.get()}_${variant.buildType}.apk"
-            val apkName = "Han1meViewer-v${output.versionName.get()}.apk"
+            val apkName = "EZ-Han1me-v${output.versionName.get()}.apk"
             (output as VariantOutputImpl).outputFileName = apkName
         }
     }

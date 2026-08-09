@@ -266,7 +266,7 @@ DownloadScreen -> DownloadViewModel -> HanimeDownloadManagerV2 -> WorkManager Wo
 ## 🗺️ 目录速查
 
 ```text
-Han1meViewer/
+EZ-Han1me/
 ├── app/                         主 Android 应用
 │   ├── src/main/java/.../logic   网络、解析、模型、数据库、状态
 │   ├── src/main/java/.../ui      Activity、Compose 页面、导航、组件、ViewModel

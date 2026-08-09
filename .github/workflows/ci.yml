@@ -85,7 +85,7 @@ jobs:
                 "client_info": {
                   "mobilesdk_app_id": "1:0:android:dummy",
                   "android_client_info": {
-                    "package_name": "com.yenaly.han1meviewer"
+                    "package_name": "com.ezhan1me.app"
                   }
                 },
                 "oauth_client": [],
@@ -104,7 +104,7 @@ jobs:
                 "client_info": {
                   "mobilesdk_app_id": "1:0:android:dummy",
                   "android_client_info": {
-                    "package_name": "com.yenaly.han1meviewer.debug"
+                    "package_name": "com.ezhan1me.app.debug"
                   }
                 },
                 "oauth_client": [],
@@ -171,4 +171,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-release-${{ github.sha }}
-          path: app/build/outputs/apk/release/Han1meViewer-v*.apk
+          path: app/build/outputs/apk/release/EZ-Han1me-v*.apk
