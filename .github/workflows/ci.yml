@@ -131,7 +131,7 @@ jobs:
               ],
               "configuration_version": "1"
             }
-            DUMMYEOF
+          DUMMYEOF
           fi
 
       - name: Generate dummy Google Services (if secret not configured)
