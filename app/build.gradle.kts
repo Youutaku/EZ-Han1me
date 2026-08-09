@@ -6,6 +6,8 @@ import Config.isRelease
 import Config.lastCommitSha
 import com.android.build.api.variant.impl.VariantOutputImpl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.security.KeyStore
+import java.io.FileInputStream
 
 plugins {
     alias(libs.plugins.com.android.application)
@@ -65,8 +67,8 @@ android {
                     var verified = false
                     for (type in types) {
                         verified = try {
-                            val ks = java.security.KeyStore.getInstance(type)
-                            java.io.FileInputStream(envKeystoreFile).use { fis ->
+                            val ks = KeyStore.getInstance(type)
+                            FileInputStream(envKeystoreFile).use { fis ->
                                 ks.load(fis, envKeystorePassword.toCharArray())
                             }
                             if (!ks.containsAlias(envKeyAlias)) continue
