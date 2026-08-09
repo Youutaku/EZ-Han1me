@@ -223,7 +223,7 @@ DownloadScreen -> DownloadViewModel -> HanimeDownloadManagerV2 -> WorkManager Wo
 1. 克隆项目：
 
    ```bash
-   git clone https://github.com/misaka10032w/Han1meViewer.git
+   git clone https://github.com/Youutaku/EZ-Han1me.git
    ```
 
 2. 使用 Android Studio 打开项目根目录。
