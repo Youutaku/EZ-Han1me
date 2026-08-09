@@ -69,3 +69,11 @@ Thumbs.db
 
 # 忽略 debug 测试构建
 /app/build/outputs/apk/debug/
+
+# 签名密钥库（绝对不能提交到仓库）
+*.jks
+*.keystore
+*.p12
+*.pfx
+# 允许 workspace 根目录下的 TRAE 分享包（如果项目需要）
+!/.trae-html-share-packages/**
