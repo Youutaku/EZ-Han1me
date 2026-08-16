@@ -25,8 +25,8 @@ data class WorkflowRuns(
 data class Artifacts(
     @SerialName("artifacts") val artifacts: List<Artifact>,
 ) {
-    val downloadLink: String get() = artifacts.first().downloadLink
-    val nodeId: String get() = artifacts.first().nodeId
+    val downloadLink: String? get() = artifacts.firstOrNull()?.downloadLink
+    val nodeId: String? get() = artifacts.firstOrNull()?.nodeId
 
     @Serializable
     data class Artifact(

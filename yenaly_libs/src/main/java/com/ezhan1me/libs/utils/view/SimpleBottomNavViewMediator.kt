@@ -80,7 +80,19 @@ class SimpleBottomNavViewMediator constructor(
     }
 
     fun detach() = apply {
-        TODO("I am lazy!")
+        check(attached) { "${javaClass.simpleName} is not attached" }
+        onItemSelectedListener?.let {
+            bottomNavigationView.setOnItemSelectedListener(null)
+        }
+        onPageChangeCallback?.let {
+            viewPager2.unregisterOnPageChangeCallback(it)
+        }
+        viewPager2.adapter = null
+        viewPager2Adapter = null
+        onItemSelectedListener = null
+        onPageChangeCallback = null
+        currentFragment = null
+        attached = false
     }
 
     /**

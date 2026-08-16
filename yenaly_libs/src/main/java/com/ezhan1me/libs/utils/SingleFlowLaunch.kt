@@ -47,16 +47,11 @@ class SingleFlowLaunch {
         start: CoroutineStart = CoroutineStart.DEFAULT,
         block: SuspendCoroutineScopeBlock,
     ): Job? {
-        if (jobMap[block] == null) {
-            jobMap[block] = AtomicInteger(0)
+        val int = jobMap.getOrPut(block) { AtomicInteger(0) }
+        if (int.getAndIncrement() != 0) {
+            return null
         }
-        jobMap[block]!!.let { int ->
-            if (int.getAndIncrement() != 0) {
-                return null
-            } else {
-                return viewModelScope.launch(context, start, block)
-            }
-        }
+        return viewModelScope.launch(context, start, block)
     }
 }
 

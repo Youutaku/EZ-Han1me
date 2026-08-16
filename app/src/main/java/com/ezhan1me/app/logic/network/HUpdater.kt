@@ -51,7 +51,7 @@ object HUpdater {
                 if (shortSha != curSha) {
                     val artifacts =
                         HanimeNetwork.githubService.getArtifacts(workflowRun.artifactsUrl)
-                    val archiveUrl = artifacts.downloadLink
+                    val archiveUrl = artifacts.downloadLink ?: return null
                     val nodeId = artifacts.nodeId
                     val changelog = runSuspendCatching {
                         HanimeNetwork.githubService.getCommitComparison(
@@ -65,10 +65,11 @@ object HUpdater {
                 val ver = HanimeNetwork.githubService.getLatestVersion()
                 val isNeeded = checkNeedUpdate(ver.tagName)
                 if (isNeeded) {
+                    val firstAsset = ver.assets.firstOrNull() ?: return null
                     return Latest(
                         ver.tagName, ver.body,
-                        ver.assets.first().browserDownloadURL,
-                        ver.assets.first().nodeID
+                        firstAsset.browserDownloadURL,
+                        firstAsset.nodeID
                     )
                 }
             }
