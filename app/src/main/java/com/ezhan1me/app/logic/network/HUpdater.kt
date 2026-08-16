@@ -52,7 +52,7 @@ object HUpdater {
                     val artifacts =
                         HanimeNetwork.githubService.getArtifacts(workflowRun.artifactsUrl)
                     val archiveUrl = artifacts.downloadLink ?: return null
-                    val nodeId = artifacts.nodeId
+                    val nodeId = artifacts.nodeId ?: return null
                     val changelog = runSuspendCatching {
                         HanimeNetwork.githubService.getCommitComparison(
                             curSha = curSha,
